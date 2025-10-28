@@ -1,10 +1,11 @@
 const config = require('./utils/config')
-const {requestLogger} = require('./utils/middleware')
+const middleware = require('./utils/middleware')
 const express = require('express')
 const app = express()
 const cors = require('cors')
 const logger = require('./utils/logger')
-const mongoose = require('mongoose')
+const mongoose = require('mongoose').default
+const userRouter = require('./controllers/users')
 
 mongoose.set('strictQuery', false)
 
@@ -20,9 +21,13 @@ mongoose.connect(config.MONGODB_URI)
 
 app.use(cors())
 app.use(express.json())
-app.use(requestLogger)
+app.use(middleware.requestLogger)
+app.use('/api/users', userRouter)
 
-app.get('/ping', (req, res) => {
-    res.json({status: 'works'})
+app.get('/ping', (_req, res) => {
+    res.send("works")
 })
+
+app.use(middleware.errorHandler)
+
 module.exports = app

@@ -1,13 +1,25 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose').default
 
 const userSchema = new mongoose.Schema({
-    username: String,
-    name: String,
-    passwordHash: String,
+    username: {
+        type: String,
+        required: true,
+        minLength: 3,
+        unique: true
+    },
+    email: {
+        type: String,
+        required: true,
+        minLength: 7,
+        unique: true
+    },
+    passwordHash: {
+        type: String,
+        required: true
+    },
 })
-
 userSchema.set('toJSON', {
-    transform: (document, returnedObject) => {
+    transform: (_document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
         delete returnedObject.__v

@@ -1,55 +1,39 @@
 const usersRouter = require('express').Router()
-const bcrypt = require('bcrypt')
+const middleware = require('../utils/middleware')
 const User = require('../models/user')
+const bcrypt = require('bcrypt')
 
-usersRouter.post('/register', async (req, res, next) => {
-    const { username, email, password } = req.body
-
-    const saltRounds = 10
-    const passwordHash = await bcrypt.hash(password, saltRounds)
-    const user = new User({
-        username,
-        email,
-        passwordHash
-    })
-
-    user.save().then(savedUser => {
-        res.status(201).json(savedUser)
-    }).catch(err => next(err))
-})
-
-usersRouter.post('/login', async (req, res) => {
-    const { email, password } = req.body
-
-    const user = await User.findOne({ email })
-    const passwordCorrect = user === null
-        ? false
-        : await bcrypt.compare(password, user.passwordHash)
-
-    if (!(user && passwordCorrect)) {
-        return response.status(401).json({
-            error: 'invalid username or password'
-        })
-    }
-
-    const userForToken = {
-        username: user.username,
-        id: user._id,
-    }
-
-    const token = jwt.sign(userForToken, process.env.SECRET)
-
-    response
-        .status(200)
-        .send({ token, username: user.username, name: user.name })
-})
-
+/*
 usersRouter.delete('/:id', async (req, res) => {
 
 })
+ */
 
-usersRouter.put('/:id', async (req, res) => {
-
+usersRouter.put('/:id', middleware.userExtractor, async (req, res) => {
+    // user should be able to update username, email or even a password if they are logged in
+    const userId = req.params.id
+    if (userId !== req.user.id) {
+        return res.status(403).json({ error: 'Forbidden: You are not allowed to edit other users' })
+    }
+    if (!req.body.password) {
+        User.findByIdAndUpdate(userId, req.body, { new: true }).then(updated => {
+            res.status(200).json(updated)
+        }).catch(() => {
+            res.status(400).json({ error: 'Invalid format of fields' })
+        })
+    } else {
+        const saltRounds = 10
+        const passwordHash = await bcrypt.hash(req.body.password, saltRounds)
+        const newUser = {
+            ...req.body,
+            password: passwordHash
+        }
+        User.findByIdAndUpdate(userId, newUser, { new: true }).then(updated => {
+            res.status(200).json(updated)
+        }).catch(() => {
+            res.status(400).json({ error: 'Invalid format of fields' })
+        })
+    }
 })
 
 module.exports = usersRouter

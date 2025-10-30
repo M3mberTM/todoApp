@@ -166,21 +166,28 @@ describe('User updating', () => {
         extraUser.id = secondDbUser.id
     })
 
-    test('Updating user email and username while logged in works with proper status', async () => {
+    test('Updating user username while logged in works with proper status', async () => {
 
         const updatedUser = {
-            email: 'newmail@gmail.com',
             username: 'root2'
         }
         const result = await api.put(`/api/users/${initialUser.id}`).set('Authorization', `Bearer ${token}`).send(updatedUser).expect(200).expect('Content-Type',/application\/json/)
-        assert.strictEqual(result.body.email, updatedUser.email)
         assert.strictEqual(result.body.username, updatedUser.username)
+    })
+
+    test('Updating user email and password while logged in works if user provides their password with proper status', async () => {
+
+        const updatedUser = {
+            email: 'newmail@gmail.com',
+            currentPassword: 'sekret'
+        }
+        const result = await api.put(`/api/users/${initialUser.id}`).set('Authorization', `Bearer ${token}`).send(updatedUser).expect(200).expect('Content-Type',/application\/json/)
+        assert.strictEqual(result.body.email, updatedUser.email)
     })
 
     test('Updating user fails if user is not logged in with proper status ', async () => {
 
         const updatedUser = {
-            email: 'newmail@gmail.com',
             username: 'root2'
         }
         const result = await api.put(`/api/users/${initialUser.id}`).send(updatedUser).expect(401).expect('Content-Type',/application\/json/)
@@ -190,11 +197,78 @@ describe('User updating', () => {
     test('Updating user fails if user is not logged in to himself with proper status ', async () => {
 
         const updatedUser = {
-            email: 'newmail@gmail.com',
             username: 'root2'
         }
         const result = await api.put(`/api/users/${extraUser.id}`).set('Authorization', `Bearer ${token}`).send(updatedUser).expect(403).expect('Content-Type',/application\/json/)
         assert.strictEqual(result.body.error, 'Forbidden: You are not allowed to edit other users')
+    })
+
+    test('Updating user email and password fails if user is logged in but does not provide password with proper status ', async () => {
+
+        const updatedUser = {
+            email: 'newmail@gmail.com',
+        }
+        const result = await api.put(`/api/users/${initialUser.id}`).set('Authorization', `Bearer ${token}`).send(updatedUser).expect(400).expect('Content-Type',/application\/json/)
+        assert.strictEqual(result.body.error, '`currentPassword` required while editing sensitive fields')
+    })
+
+    test('Updating user email and password fails if user is logged in but does not provide password with proper status ', async () => {
+
+        const updatedUser = {
+            email: 'newmail@gmail.com',
+            currentPassword: 'wrongPass'
+        }
+        const result = await api.put(`/api/users/${initialUser.id}`).set('Authorization', `Bearer ${token}`).send(updatedUser).expect(401).expect('Content-Type',/application\/json/)
+        assert.strictEqual(result.body.error, 'invalid password')
+    })
+})
+
+describe('User deletion', () => {
+    beforeEach(async () => {
+        await User.deleteMany({})
+
+        const passwordHash = await bcrypt.hash(initialUser.password, 10)
+
+        const newUser = {
+            username: initialUser.username,
+            email: initialUser.email,
+            passwordHash
+        }
+        const user = new User(newUser)
+
+        await user.save()
+        const loginResult = await api.post('/api/login').send({ email: initialUser.email, password: initialUser.password })
+        token = loginResult.body.token
+        const decodedToken = jwt.verify(token, process.env.SECRET)
+        initialUser.id = decodedToken.id
+    })
+
+    test('Deleting user works if user is logged in and provides password with proper status', async () => {
+        const passwordBody = {
+            currentPassword: 'sekret'
+        }
+        await api.delete(`/api/users/${initialUser.id}`).set('Authorization', `Bearer ${token}`).send(passwordBody).expect(204)
+    })
+
+    test('Deleting user does not work if the user is logged in but does not provide password with proper status', async () => {
+        const result = await api.delete(`/api/users/${initialUser.id}`).set('Authorization', `Bearer ${token}`).expect(400).expect('Content-Type', /application\/json/)
+        assert.strictEqual(result.body.error, '`currentPassword` required while editing sensitive fields')
+    })
+
+    test('Deleting user does not work if the user is logged in as someone else with proper status', async () => {
+        const passwordBody = {
+            currentPassword: 'sekret'
+        }
+        const result = await api.delete(`/api/users/${extraUser.id}`).set('Authorization', `Bearer ${token}`).send(passwordBody).expect(403).expect('Content-Type', /application\/json/)
+        assert.strictEqual(result.body.error, 'Forbidden: You are not allowed to edit other users')
+    })
+
+    test('Deleting user does not work if the user is not logged in with proper status', async () => {
+        const passwordBody = {
+            currentPassword: 'sekret'
+        }
+        const result = await api.delete(`/api/users/${initialUser.id}`).send(passwordBody).expect(401).expect('Content-Type', /application\/json/)
+        assert.strictEqual(result.body.error, 'token is invalid')
     })
 })
 

@@ -17,6 +17,13 @@ const initialUser = {
     id: null
 }
 
+const extraUser ={
+    username: 'extraUser',
+    email: 'something2@gmail.com',
+    password: 'sekret2',
+    id: null
+}
+
 let token = null
 
 describe('Creating new items', () => {
@@ -151,6 +158,91 @@ describe('Getting items', () => {
     })
 })
 
+
+describe('Updating items', () => {
+    beforeEach(async () => {
+        await Item.deleteMany({})
+        await User.deleteMany({})
+
+        const passwordHash = await bcrypt.hash(initialUser.password, 10)
+
+        const newUser = {
+            username: initialUser.username,
+            email: initialUser.email,
+            passwordHash
+        }
+        const user = new User(newUser)
+
+        await user.save()
+        const loginResult = await api.post('/api/login').send({ email: initialUser.email, password: initialUser.password })
+        token = loginResult.body.token
+        const decodedToken = jwt.verify(token, process.env.SECRET)
+        initialUser.id = decodedToken.id
+        const extraPasswordHash = await bcrypt.hash(extraUser.password, 10)
+
+        const extraNewUser = {
+            username: extraUser.username,
+            email: extraUser.email,
+            passwordHash: extraPasswordHash
+        }
+        const secondUser = new User(extraNewUser)
+
+        await secondUser.save()
+        const secondDbUser = await User.find({ email: extraUser.email })
+        extraUser.id = secondDbUser.id
+
+        for (let item of newItems) {
+            let itemObject = null
+            if (item.content.includes('groceries')) {
+                itemObject = new Item({ ...item, userId: extraUser.id })
+            } else {
+                itemObject = new Item({ ...item, userId: initialUser.id })
+            }
+            let itemResult = await itemObject.save()
+            item.id = itemResult.id.toString()
+        }
+    })
+
+    test('Updating an item works if the user is logged in with proper status code', async () => {
+        const newItem = {
+            content: 'new todo item',
+            priority: 0,
+            deadline: new Date().toISOString()
+        }
+        const result = await api.put(`/api/items/${newItems[0].id}`).set('Authorization', `Bearer ${token}`).send(newItem).expect(201).expect('Content-Type', /application\/json/)
+        assert.strictEqual(result.body.content, newItem.content)
+    })
+
+    test('Updating an item does not work if the user is not logged in with proper status code', async () => {
+        const newItem = {
+            content: 'new todo item',
+            priority: 0,
+            deadline: new Date().toISOString()
+        }
+        const result = await api.put(`/api/items/${newItems[0].id}`).send(newItem).expect(401).expect('Content-Type', /application\/json/)
+        assert.strictEqual(result.body.error, 'token is invalid')
+    })
+
+    test('Updating an item does not work if it does not belong to the logged in user with proper status code', async () => {
+        const newItem = {
+            content: 'new todo item',
+            priority: 0,
+            deadline: new Date().toISOString()
+        }
+        const result = await api.put(`/api/items/${newItems[1].id}`).set('Authorization', `Bearer ${token}`).send(newItem).expect(403).expect('Content-Type', /application\/json/)
+        assert.strictEqual(result.body.error, 'Forbidden: This item belongs to a different user')
+    })
+
+    test('If the item does not exits, user receives 404 status code', async () => {
+        const newItem = {
+            content: 'new todo item',
+            priority: 0,
+            deadline: new Date().toISOString()
+        }
+        const result = await api.put('/api/items/a193274').set('Authorization', `Bearer ${token}`).send(newItem).expect(404).expect('Content-Type', /application\/json/)
+        assert.strictEqual(result.body.error, 'Item not found')
+    })
+})
 after(async () => {
     await mongoose.connection.close()
 })

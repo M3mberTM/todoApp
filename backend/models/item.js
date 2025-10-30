@@ -7,7 +7,9 @@ const itemSchema = new mongoose.Schema({
     },
     priority: {
         type: Number,
-        required: true
+        min: 0,
+        max: 3,
+        default: 0
     },
     deadline: Date,
     userId: {

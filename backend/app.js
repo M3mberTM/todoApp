@@ -8,6 +8,7 @@ const logger = require('./utils/logger')
 const mongoose = require('mongoose').default
 const userRouter = require('./controllers/users')
 const accessRouter = require('./controllers/access')
+const itemRouter = require('./controllers/items')
 
 mongoose.set('strictQuery', false)
 
@@ -27,6 +28,7 @@ app.use(middleware.requestLogger)
 app.use(middleware.tokenExtractor)
 app.use('/api/', accessRouter)
 app.use('/api/users', userRouter)
+app.use('/api/items', itemRouter)
 
 app.get('/ping', (_req, res) => {
     res.send('works')

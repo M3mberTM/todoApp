@@ -82,7 +82,36 @@ describe('Registering when there is only one user in the db', () => {
         assert(result.body.error.includes('`username` and `email` must be unique'))
         const endUsers = await User.find({})
         assert.strictEqual(endUsers.length, beginningUsers.length)
+    })
 
+    test('User creation fails if no email is provided with proper status', async () => {
+        const beginningUsers = await User.find({})
+
+        const newUser = {
+            username: 'random',
+            password: 'something'
+        }
+
+        const result = await api.post('/api/register').send(newUser).expect(400).expect('Content-Type', /application\/json/)
+
+        assert.strictEqual(result.body.error, 'User validation failed: email: Path `email` is required.')
+        const endUsers = await User.find({})
+        assert.strictEqual(endUsers.length, beginningUsers.length)
+    })
+
+    test('User creation fails if no username is provided with proper status', async () => {
+        const beginningUsers = await User.find({})
+
+        const newUser = {
+            email: 'random@gmail.com',
+            password: 'something'
+        }
+
+        const result = await api.post('/api/register').send(newUser).expect(400).expect('Content-Type', /application\/json/)
+
+        assert.strictEqual(result.body.error, 'User validation failed: username: Path `username` is required.')
+        const endUsers = await User.find({})
+        assert.strictEqual(endUsers.length, beginningUsers.length)
     })
 })
 

@@ -41,4 +41,17 @@ itemRouter.put('/:id', middleware.userExtractor, async (req, res) => {
     res.status(201).json(item)
 })
 
+itemRouter.delete('/:id', middleware.userExtractor, async (req, res) => {
+    const itemId = req.params.id
+    const item = await Item.findById(itemId)
+    if (!item) {
+        return res.status(404).json({ error: 'Item not found' })
+    }
+    if (item.userId.toString() !== req.user.id){
+        return res.status(403).json({ error: 'Forbidden: This item belongs to a different user' })
+    }
+    await Item.findByIdAndDelete(itemId)
+    res.status(204).end()
+})
+
 module.exports = itemRouter

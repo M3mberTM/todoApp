@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types'
 import {useTheme} from '../../context/useTheme.js';
+import {forwardRef} from 'react';
 
-const Input = ({placeholder, inputType='text', variant='standard', ss={}}) => {
+const Input = forwardRef(({placeholder, variant='standard', ss={}, ...props}, ref) => {
     const {getThemeColors} = useTheme()
     const colors = getThemeColors()
 
@@ -35,14 +35,8 @@ const Input = ({placeholder, inputType='text', variant='standard', ss={}}) => {
     const chosenStyle = variant === 'standard' ? standardInputStyle : outlinedInputStyle
 
     return (
-        <input style={chosenStyle} type={inputType} placeholder={placeholder}/>
+        <input style={chosenStyle} placeholder={placeholder} ref={ref} {...props}/>
     )
-}
+})
 
-Input.propTypes = {
-    inputType: PropTypes.string,
-    variant: PropTypes.oneOf(['standard', 'outlined']),
-    placeholder: PropTypes.string,
-    ss: PropTypes.object
-}
 export default Input

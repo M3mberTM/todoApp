@@ -3,6 +3,11 @@ const middleware = require('../utils/middleware')
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 
+usersRouter.get('/', middleware.userExtractor, async (req, res) => {
+    const user = await User.findById(req.user.id)
+    res.status(201).json(user)
+})
+
 usersRouter.delete('/:id', middleware.userExtractor, async (req, res) => {
     const userId = req.params.id
     if (userId !== req.user.id) {

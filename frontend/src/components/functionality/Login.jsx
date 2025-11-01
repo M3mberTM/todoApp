@@ -1,31 +1,30 @@
 import Button from '../custom/Button.jsx';
-import {useTheme} from '../../context/useTheme.js';
 import Input from '../custom/Input.jsx';
 import Typography from '../custom/Typography.jsx';
+import Card from '../custom/Card.jsx';
+import {useNavigate} from 'react-router-dom';
 
-const Login = () => {
-    const {theme, toggleTheme, getThemeColors} = useTheme()
-    const colors = getThemeColors()
-
-    const loginStyle = {
-        textAlign: 'center',
-        width: '350px',
-        backgroundColor: colors.bg,
-        borderRadius: '10px',
-        padding: '30px 10px',
-        boxSizing: 'border-box',
-        boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5)'
+const Login = ({handleLogin}) => {
+    const navigate = useNavigate()
+    const onLogin = (event) => {
+        event.preventDefault()
+        const credentials = {
+            email: event.target.email.value,
+            password: event.target.password.value
+        }
+        handleLogin(credentials).then()
     }
     return (
-        <div style={loginStyle}>
-            <form>
+        <Card>
+            <form onSubmit={onLogin}>
                 <Typography>Login</Typography>
-                <Input inputType={'email'} placeholder={'Email'} ss={{width: '80%'}}/>
-                <Input inputType={'password'} placeholder={'Password'} ss={{marginBottom: '10px', width: '80%'}}/>
-                <Button title={'Log in'} handleClick={() => toggleTheme(theme === 'dark' ? 'light' : 'dark')} ss={{width: '50%', marginBottom: '5px'}}/><br/>
-                <Button title={'Register'} handleClick={() => console.log('hello')} ss={{width: '50%'}} />
+                <Input name={'email'} type={'email'} placeholder={'Email'} ss={{width: '80%'}}/>
+                <Input name={'password'} type={'password'} placeholder={'Password'} ss={{marginBottom: '10px', width: '80%'}}/>
+                <Button title={'Log in'} type={'submit'} ss={{width: '50%', marginBottom: '7px'}}/><br/>
+                <Typography size={'sub'} ss={{marginBottom: '2px'}}>Don't have an account?</Typography>
+                <Button title={'Register'} type={'button'} handleClick={() => navigate('/register')} ss={{width: '50%'}} />
             </form>
-        </div>
+        </Card>
     )
 }
 

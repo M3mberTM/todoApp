@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import {useTheme} from '../../context/useTheme.js';
 import {useState} from 'react';
 
-const Button = ({title, handleClick, ss={}}) => {
+const Button = ({title, handleClick, type, ss={}}) => {
     const {getThemeColors} = useTheme()
     const [isHover, setIsHover] = useState(false)
 
@@ -16,10 +16,13 @@ const Button = ({title, handleClick, ss={}}) => {
         color: textColor,
         textAlign: 'center',
         padding: '5px 10px',
+        height: '32px',
         display: 'inline-block',
         borderRadius: '5px',
         marginTop: '5px',
         fontWeight: 'bold',
+        outline: 'none',
+        border: 'none',
         ...ss
     }
 
@@ -30,15 +33,16 @@ const Button = ({title, handleClick, ss={}}) => {
         setIsHover(false)
     }
 
-    return <div style={buttonStyle} onClick={handleClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    return <button type={type} style={buttonStyle} onClick={handleClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
         {title}
-    </div>
+    </button>
 }
 
 Button.propTypes = {
     title: PropTypes.string.isRequired,
-    handleClick: PropTypes.func.isRequired,
-    ss: PropTypes.object
+    handleClick: PropTypes.func,
+    ss: PropTypes.object,
+    type: PropTypes.string
 }
 
 

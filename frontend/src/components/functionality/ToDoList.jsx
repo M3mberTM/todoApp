@@ -2,9 +2,10 @@ import {useEffect, useState} from 'react';
 import itemService from '../../services/items.js'
 import Select from '../custom/Select.jsx';
 import SelectItem from '../custom/SelectItem.jsx';
-import Input from '../custom/Input.jsx';
 import ToDoItem from './ToDoItem.jsx';
 import {priorities} from '../../utils/constants.js';
+import ToDoItemForm from './ToDoItemForm.jsx';
+import ToDoSection from './ToDoSection.jsx';
 
 const ToDoList = () => {
     const [items, setItems] = useState([])
@@ -37,23 +38,34 @@ const ToDoList = () => {
         })
         event.target.newItem.value = ''
     }
+
+    const updateItem = (newItem) => {
+        itemService.update(newItem).then(item => {
+            const newItems = items.map((elem) => {
+                if (elem.id === item.id) {
+                    return item
+                }
+                return elem
+            })
+            setItems(newItems)
+        })
+    }
     return (
         <div style={listStyle}>
-            <Select label={'Group by'} variant={'outlined'} value={groupBy} changeHandle={handleGroupChange}>
+            <Select label={'Group by'} variant={'outlined'} value={groupBy} onChange={handleGroupChange}>
                 {Object.keys(sections).map(section => {
-                    return <SelectItem value={section}>{section}</SelectItem>
+                    return <SelectItem key={section} value={section}>{section}</SelectItem>
                 })}
             </Select>
-            <div>
-                {items.map(item => {
-                    return <ToDoItem key={item.id} itemObject={item}/>
+            <div style={{display: 'flex', flexDirection: 'row', marginTop: '10px', overflow: 'auto'}}>
+                {Object.keys(sections[groupBy]).map(elem => {
+                    const filteredItems = items.filter(item => {
+                        return item[groupBy] == elem
+                    })
+                    return <ToDoSection key={sections[groupBy][elem]} name={sections[groupBy][elem]} items={filteredItems} handleUpdate={updateItem}/>
                 })}
             </div>
-            <div>
-                <form onSubmit={createItem}>
-                    <Input variant={'outlined'} placeholder={'New item...'} name={'newItem'}/>
-                </form>
-            </div>
+            <ToDoItemForm handleUpdate={createItem}/>
         </div>
     )
 }

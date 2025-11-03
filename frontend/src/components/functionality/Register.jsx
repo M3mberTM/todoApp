@@ -23,9 +23,9 @@ const Register = ({handleRegister}) => {
                 <Input name={'email'} type={'email'} placeholder={'Your email...'} ss={{width: '80%'}}/>
                 <Input name={'password'} type={'password'} placeholder={'Your password...'} ss={{width: '80%'}}/>
                 <Input name={'repeatPassword'} type={'password'} placeholder={'Your password again...'} ss={{marginBottom: '10px', width: '80%'}}/>
-                <Button title={'Register'} type={'submit'} ss={{width: '50%', marginBottom: '7px'}}/>
+                <Button type={'submit'} ss={{width: '50%', marginBottom: '7px'}}>Register</Button>
                 <Typography size={'sub'} ss={{marginBottom: '2px'}}>Do you have an account?</Typography>
-                <Button title={'Log in'} type={'button'} handleClick={() => navigate('/login')} ss={{width: '50%'}} />
+                <Button type={'button'} onClick={() => navigate('/login')} ss={{width: '50%'}}>Log in</Button>
             </form>
         </Card>
     )

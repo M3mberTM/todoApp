@@ -12,6 +12,7 @@ const Input = forwardRef(({placeholder, variant='standard', ss={}, ...props}, re
         fontWeight: 'bold',
         boxSizing: 'border-box',
         borderRadius: '5px',
+        borderColor: colors.bgSecondary,
         outline: 'none',
         ...ss
     }

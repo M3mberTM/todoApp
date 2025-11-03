@@ -6,7 +6,7 @@ import accessService from './services/access.js'
 import Register from './components/functionality/Register.jsx';
 import ToDo from './components/functionality/ToDo.jsx';
 import ProtectedRoute from './components/functionality/ProtectedRoute.jsx';
-import Settings from './components/functionality/Settings.jsx';
+import Settings from './components/functionality/Settings/Settings.jsx';
 import utilService from './services/utils.js'
 
 function App() {
@@ -21,7 +21,6 @@ function App() {
         return parsed
     })
     const navigate = useNavigate()
-
 
     const wrapperStyle = {
         backgroundImage: `url(${colors.image})`,
@@ -39,7 +38,6 @@ function App() {
         boxSizing: 'border-box'
     }
     const handleLogin = async (credentials) => {
-        console.log('loggin in with: ', credentials)
         try {
             const user = await accessService.login(credentials)
 
@@ -53,7 +51,6 @@ function App() {
     }
 
     const handleRegister = async (credentials) => {
-        console.log('Registering with user: ', credentials)
         try {
             await accessService.register(credentials)
             const loginCreds = {email: credentials.email, password: credentials.password}

@@ -1,7 +1,8 @@
 import Typography from './Typography.jsx';
-import {useTheme} from "../../context/useTheme.js";
+import {useTheme} from '../../context/useTheme.js';
+import {forwardRef} from 'react';
 
-const Select = ({children, label, value, changeHandle, variant='standard', name='select',ss={label: {}, select: {}}}) => {
+const Select =forwardRef( ({children, label, variant='standard', name='select',ss={label: {}, select: {}}, ...props}, ref) => {
     const {getThemeColors} = useTheme()
     const colors = getThemeColors()
 
@@ -35,11 +36,11 @@ const Select = ({children, label, value, changeHandle, variant='standard', name=
     return (
         <div style={{display: 'inline-block'}}>
             <Typography ss={labelStyle} size={'h3'}>{label}</Typography>
-            <select style={chosenStyle} name={name} value={value} onChange={changeHandle}>
+            <select style={chosenStyle} name={name} ref={ref} {...props}>
                 {children}
             </select>
         </div>
     )
-}
+})
 
 export default Select

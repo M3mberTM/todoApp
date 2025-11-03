@@ -1,18 +1,13 @@
-import {useTheme} from "../../context/useTheme.js";
 import Input from "../custom/Input.jsx";
 
-const ToDoItemForm = ({itemObject, handleUpdate}) => {
-    const {getThemeColors} = useTheme()
-    const colors = getThemeColors()
+const ToDoItemForm = ({handleUpdate}) => {
 
-    const formStyle = {
-        backgroundColor: colors.bg
-    }
-    return <div style={formStyle}>
-        <form>
-            <Input name={'content'}/>
+    return <div>
+        <form onSubmit={handleUpdate}>
+            <Input variant={'outlined'} placeholder={'New item...'} name={'newItem'}/>
         </form>
     </div>
+
 }
 
 export default ToDoItemForm

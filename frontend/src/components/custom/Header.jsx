@@ -1,11 +1,12 @@
 import {useTheme} from '../../context/useTheme.js';
-import Typography from '../custom/Typography.jsx';
+import Typography from './Typography.jsx';
 import Popup from 'reactjs-popup';
-import Menu from './Menu.jsx';
-import MenuItem from './MenuItem.jsx';
+import Menu from '../functionality/Menu.jsx';
+import MenuItem from '../functionality/MenuItem.jsx';
 import {useNavigate} from 'react-router-dom';
+import {forwardRef} from 'react';
 
-const Header = ({user, name, handleLogout}) => {
+const Header =forwardRef( ({user, name, handleLogout,...props}, ref) => {
     const {theme, toggleTheme, getThemeColors} = useTheme()
     const colors = getThemeColors()
     const navigate = useNavigate()
@@ -18,10 +19,9 @@ const Header = ({user, name, handleLogout}) => {
         display: 'flex',
         justifyContent: 'space-between',
         padding: '10px 10px 5px',
-        marginBottom: '10px'
     }
     return (
-        <div style={headerStyle}>
+        <div style={headerStyle} ref={ref} {...props}>
             <Typography size={'h2'}>{name}</Typography>
             <Popup
                 trigger={<Typography size={'h3'}>{user.username} </Typography>}
@@ -41,6 +41,6 @@ const Header = ({user, name, handleLogout}) => {
             </Popup>
         </div>
     )
-}
+})
 
 export default Header

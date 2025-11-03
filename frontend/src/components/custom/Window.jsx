@@ -10,7 +10,9 @@ const Window = ({children}) => {
         backgroundColor: colors.bg,
         borderRadius: '10px',
         boxSizing: 'border-box',
-        boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5)'
+        boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5)',
+        display: 'flex',
+        flexDirection: 'column'
     }
     return (
         <div style={windowStyle}>

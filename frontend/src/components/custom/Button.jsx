@@ -1,8 +1,7 @@
-import PropTypes from 'prop-types'
 import {useTheme} from '../../context/useTheme.js';
-import {useState} from 'react';
+import {forwardRef, useState} from 'react';
 
-const Button = ({title, handleClick, type, ss={}}) => {
+const Button =forwardRef( ({children, ss={}, ...props}, ref) => {
     const {getThemeColors} = useTheme()
     const [isHover, setIsHover] = useState(false)
 
@@ -11,9 +10,10 @@ const Button = ({title, handleClick, type, ss={}}) => {
     const bgColor = !ss.backgroundColor ? colors.bgSecondary : ss.backgroundColor
     const textColor = !ss.color ? colors.bg : ss.color
     const hoverColor = !ss.hover ? colors.hover : ss.hover
+    const hoverTextColor = !ss.hoverText ? textColor : ss.hoverText
     const buttonStyle = {
         backgroundColor: isHover ? hoverColor : bgColor,
-        color: textColor,
+        color: isHover ? hoverTextColor : textColor,
         textAlign: 'center',
         padding: '5px 10px',
         height: '32px',
@@ -33,17 +33,9 @@ const Button = ({title, handleClick, type, ss={}}) => {
         setIsHover(false)
     }
 
-    return <button type={type} style={buttonStyle} onClick={handleClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-        {title}
+    return <button ref={ref} style={buttonStyle} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props}>
+        {children}
     </button>
-}
-
-Button.propTypes = {
-    title: PropTypes.string.isRequired,
-    handleClick: PropTypes.func,
-    ss: PropTypes.object,
-    type: PropTypes.string
-}
-
+})
 
 export default Button

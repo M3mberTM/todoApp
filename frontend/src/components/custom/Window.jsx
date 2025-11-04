@@ -1,4 +1,4 @@
-import {useTheme} from '../../context/useTheme.js';
+import {useTheme} from '../../context/theme/useTheme.js';
 
 const Window = ({children}) => {
     const {getThemeColors} = useTheme()

@@ -1,19 +1,22 @@
 import Login from './components/functionality/Login.jsx';
-import {useTheme} from './context/useTheme.js';
-import {Routes, Route, Navigate, useNavigate} from 'react-router-dom';
+import {useTheme} from './context/theme/useTheme.js';
+import {Routes, Route, useNavigate} from 'react-router-dom';
 import {useState} from 'react';
 import accessService from './services/access.js'
 import Register from './components/functionality/Register.jsx';
-import ToDo from './components/functionality/ToDo.jsx';
+import HomePage from './components/functionality/todoList/HomePage.jsx';
 import ProtectedRoute from './components/functionality/ProtectedRoute.jsx';
 import Settings from './components/functionality/Settings/Settings.jsx';
 import utilService from './services/utils.js'
+import Notification from './components/functionality/Notification.jsx';
+import {useNotification} from './context/notification/useNotification.js';
 
 function App() {
     const {getThemeColors} = useTheme()
     const colors = getThemeColors()
+    const {notification} = useNotification()
     const [user, setUser] = useState(() => {
-        const loggedUser = window.localStorage.getItem('loggedInUser')
+        const loggedUser = window.sessionStorage.getItem('loggedInUser')
         const parsed = loggedUser ? JSON.parse(loggedUser) : null
         if (parsed !== null) {
             utilService.setToken(parsed.token)
@@ -40,13 +43,12 @@ function App() {
     const handleLogin = async (credentials) => {
         try {
             const user = await accessService.login(credentials)
-
-            window.localStorage.setItem('loggedInUser', JSON.stringify(user))
+            window.sessionStorage.setItem('loggedInUser', JSON.stringify(user))
             setUser(user)
             navigate('/')
             utilService.setToken(user.token)
         } catch (e) {
-            console.log('wrong credentials')
+            console.log(e)
         }
     }
 
@@ -56,22 +58,23 @@ function App() {
             const loginCreds = {email: credentials.email, password: credentials.password}
             await handleLogin(loginCreds)
         } catch (e) {
-            console.log('Something went wrong')
+            console.log(e)
         }
     }
 
     const handleLogout = () => {
-        window.localStorage.removeItem('loggedInUser')
+        window.sessionStorage.removeItem('loggedInUser')
         setUser(null)
         navigate('/login')
     }
     return (
         <div style={wrapperStyle}>
+            <Notification type={notification.type}>{notification.msg}</Notification>
             <Routes>
                 <Route path={'/login'} element={<Login handleLogin={handleLogin}/>}/>
                 <Route path={'/register'} element={<Register handleRegister={handleRegister}/>}/>
-                <Route path={'/'} element={<ProtectedRoute user={user}><ToDo user={user} handleLogout={handleLogout}/></ProtectedRoute>}/>
-                <Route path={'/settings'} element={<ProtectedRoute user={user}><Settings user={user} handleLogout={handleLogout}/></ProtectedRoute>}/>
+                <Route path={'/'} element={<ProtectedRoute user={user}><HomePage user={user} handleLogout={handleLogout}/></ProtectedRoute>}/>
+                <Route path={'/settings'} element={<ProtectedRoute user={user}><Settings user={user} handleLogout={handleLogout} setUser={setUser}/></ProtectedRoute>}/>
             </Routes>
         </div>
     )

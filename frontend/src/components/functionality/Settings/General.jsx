@@ -1,5 +1,5 @@
 import Typography from '../../custom/Typography.jsx';
-import {useTheme} from '../../../context/useTheme.js';
+import {useTheme} from '../../../context/theme/useTheme.js';
 
 const General = ({user}) => {
     const {getThemeColors} = useTheme()

@@ -1,8 +1,10 @@
 import Typography from '../../custom/Typography.jsx';
 import Input from '../../custom/Input.jsx';
 import Button from '../../custom/Button.jsx';
+import {useNotification} from '../../../context/notification/useNotification.js';
 
 const UpdateUser = ({user, handleUpdate}) => {
+    const {addNotification} = useNotification()
 
     const itemStyle = {
         display: 'flex',
@@ -21,19 +23,36 @@ const UpdateUser = ({user, handleUpdate}) => {
 
     const updateUsername = (event) => {
         event.preventDefault()
-        const updatedUser = {username: event.target.username.value, id: user.id}
+        const username = event.target.username.value
+        if (username.length < 1) {
+            addNotification('Missing fields', true)
+            return
+        }
+        const updatedUser = {username, id: user.id}
         handleUpdate(updatedUser)
     }
 
     const updateEmail = (event) => {
         event.preventDefault()
-        const updatedUser = {email: event.target.email.value, id: user.id, currentPassword: event.target.password.value}
+        const email = event.target.email.value
+        const password = event.target.password.value
+        if (email.length < 1 || password.length < 1) {
+            addNotification('Missing fields', true)
+            return
+        }
+        const updatedUser = {email, id: user.id, currentPassword: password}
         handleUpdate(updatedUser)
     }
 
     const updatePassword = (event) => {
         event.preventDefault()
-        const updatedUser = {password: event.target.newPassword.value, id: user.id, currentPassword: event.target.currPassword.value}
+        const newPassword = event.target.newPassword.value
+        const password = event.target.currPassword.value
+        if (newPassword.length < 1 || password.length < 1) {
+            addNotification('Missing fields', true)
+            return
+        }
+        const updatedUser = {password: newPassword, id: user.id, currentPassword: password}
         handleUpdate(updatedUser)
     }
     return <div style={itemStyle}>

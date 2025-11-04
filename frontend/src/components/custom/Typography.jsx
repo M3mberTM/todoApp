@@ -1,4 +1,4 @@
-import {useTheme} from '../../context/useTheme.js';
+import {useTheme} from '../../context/theme/useTheme.js';
 import {forwardRef} from 'react';
 
 const Typography = forwardRef(({children, size='h1', ss={}, ...props}, ref) => {

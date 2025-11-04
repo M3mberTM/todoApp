@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ThemeContext from './themeContext.js';
-import {light,dark} from '../utils/themeColors.js'
+import {light,dark} from '../../utils/themeColors.js'
 
 const ThemeProvider = ({ children }) => {
     const [theme, setTheme] = useState(

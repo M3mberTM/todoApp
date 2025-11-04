@@ -18,6 +18,8 @@ const errorHandler = (error, _request, response, next) => {
         return response.status(400).json({ error: '`username` and `email` must be unique' })
     } else if (error.name === 'JsonWebTokenError') {
         return response.status(401).json({ error: 'token is invalid' })
+    } else if (error.name === 'TokenExpiredError') {
+        return response.status(401).json({ error: 'token expired' })
     }
 
     next(error)
@@ -39,14 +41,17 @@ const tokenExtractor = (request, _response, next) => {
 }
 
 const userExtractor = async (request, response, next) => {
-    const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
-    if (decodedToken) {
-        request.user = await User.findById(decodedToken.id)
-    } else {
-        response.status(401).json({ error: 'token is invalid' })
+    try {
+        const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+        if (decodedToken) {
+            request.user = await User.findById(decodedToken.id)
+        } else {
+            response.status(401).json({ error: 'token is invalid' })
+        }
+        next()
+    } catch (e) {
+        next(e)
     }
-
-    next()
 }
 
 module.exports = {

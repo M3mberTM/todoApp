@@ -1,16 +1,11 @@
-import {useTheme} from '../../context/useTheme.js';
 import {forwardRef} from 'react';
 
-const SelectItem =forwardRef( ({children, variant='standard', ...props}, ref) => {
-    const {getThemeColors} = useTheme()
-    const colors = getThemeColors()
+const SelectItem =forwardRef( ({children, ss={}, ...props}, ref) => {
     const itemStyle = {
-        backgroundColor: colors.bg,
-        color: colors.text
+        ...ss
     }
-    const chosenStyle = variant==='standard' ? {} : itemStyle
     return (
-        <option style={chosenStyle} ref={ref} {...props}>{children}</option>
+        <option style={itemStyle} ref={ref} {...props}>{children}</option>
     )
 })
 

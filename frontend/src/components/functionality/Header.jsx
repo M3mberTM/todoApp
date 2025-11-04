@@ -1,8 +1,8 @@
-import {useTheme} from '../../context/useTheme.js';
-import Typography from './Typography.jsx';
+import {useTheme} from '../../context/theme/useTheme.js';
+import Typography from '../custom/Typography.jsx';
 import Popup from 'reactjs-popup';
-import Menu from '../functionality/Menu.jsx';
-import MenuItem from '../functionality/MenuItem.jsx';
+import Menu from './Menu.jsx';
+import MenuItem from './MenuItem.jsx';
 import {useNavigate} from 'react-router-dom';
 import {forwardRef} from 'react';
 

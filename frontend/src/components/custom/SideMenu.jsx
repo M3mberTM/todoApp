@@ -1,5 +1,5 @@
 import {forwardRef} from 'react';
-import {useTheme} from '../../context/useTheme.js';
+import {useTheme} from '../../context/theme/useTheme.js';
 
 const SideMenu = forwardRef(({children, ss={}, ...props}, ref) => {
     const {getThemeColors} = useTheme()

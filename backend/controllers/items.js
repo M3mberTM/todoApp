@@ -36,6 +36,8 @@ itemRouter.put('/:id', middleware.userExtractor, async (req, res) => {
     item.priority = req.body.priority ?? item.priority
     if (item.deadline) {
         item.deadline = req.body.deadline ?? item.deadline
+    } else {
+        item.deadline = req.body.deadline
     }
     await item.save()
     res.status(201).json(item)

@@ -1,4 +1,4 @@
-import Typography from '../custom/Typography.jsx';
+import Typography from '../../custom/Typography.jsx';
 import ToDoItem from './ToDoItem.jsx';
 
 const ToDoSection = ({items, name, handleUpdate}) => {

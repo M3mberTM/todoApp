@@ -43,12 +43,23 @@ const HomePage = ({user, handleLogout}) => {
             addNotification(err.response.data.error, true)
         })
     }
+
+    const removeItem = (itemId) => {
+        itemService.remove(itemId).then(() => {
+            const newItems = items.filter((elem) => {
+                return elem.id !== itemId
+            })
+            setItems(newItems)
+        }).catch(err => {
+            addNotification(err.response.data.error, true)
+        })
+    }
     return (
         <Window>
             <Header name={'Todo app'} user={user} handleLogout={handleLogout}/>
             <div style={{marginTop: '10px'}}>
                 <TodoOptions groupBy={groupBy} setGroupBy={setGroupBy} createItem={createItem}/>
-                <ToDoList items={items} groupBy={groupBy} handleUpdate={updateItem}/>
+                <ToDoList items={items} groupBy={groupBy} handleUpdate={updateItem} handleRemove={removeItem}/>
             </div>
         </Window>
     )

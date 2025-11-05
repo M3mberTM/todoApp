@@ -34,7 +34,7 @@ const Select =forwardRef( ({children, label, variant='standard', name='select',s
         ...ss.label
     }
     return (
-        <div style={{display: 'inline-block'}}>
+        <div style={{display: 'inline-block', textAlign: 'right'}}>
             <Typography ss={labelStyle} size={'h3'}>{label}</Typography>
             <select style={chosenStyle} name={name} ref={ref} {...props}>
                 {children}

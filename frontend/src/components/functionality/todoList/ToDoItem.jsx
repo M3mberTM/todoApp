@@ -6,8 +6,9 @@ import Input from '../../custom/Input.jsx';
 import Select from '../../custom/Select.jsx';
 import SelectItem from '../../custom/SelectItem.jsx';
 import Button from '../../custom/Button.jsx';
+import CheckBox from '../../custom/CheckBox.jsx';
 
-const ToDoItem = ({itemObject, handleUpdate}) => {
+const ToDoItem = ({itemObject, handleUpdate, handleRemove}) => {
     const [isUpdate, setIsUpdate] = useState(false)
     const [content, setContent] = useState(itemObject.content)
     const [currPriority, setCurrPriority] = useState(itemObject.priority)
@@ -61,6 +62,24 @@ const ToDoItem = ({itemObject, handleUpdate}) => {
         setDeadline(!itemObject.deadline ? undefined: itemObject.deadline.slice(0,-1))
         setIsUpdate(false)
     }
+
+    const getDeadline = (deadline) => {
+        const date = new Date(deadline)
+        return `${date.getDate()}/${date.getUTCMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
+    }
+
+    const isDeadlinePassed = (deadline) => {
+        if (!deadline) {
+            return false
+        }
+        const currDate = new Date()
+        const deadlineDate = new Date(deadline)
+        return deadlineDate < currDate
+    }
+
+    const passedDateStyle = {
+        color: '#ff0000',
+    }
     if (isUpdate) {
         return (
             <div style={itemStyle}>
@@ -83,10 +102,13 @@ const ToDoItem = ({itemObject, handleUpdate}) => {
 
     return (
         <div style={itemStyle} onDoubleClick={() => setIsUpdate(true)}>
-            <Typography size={'15px'}>{itemObject.content}</Typography>
+            <div style={{display: 'flex'}}>
+                <CheckBox onChange={() => handleRemove(itemObject.id)}/>
+                <Typography size={'15px'} ss={{flex:'1'}}>{itemObject.content}</Typography>
+            </div>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <Typography size={'sub'} ss={{color: priorityColor}} onClick={() => console.log('priority')}>{priorities[itemObject.priority]}</Typography>
-                <Typography size={'sub'}>{!itemObject.deadline ? 'No deadline': itemObject.deadline}</Typography>
+                <Typography size={'sub'} ss={isDeadlinePassed(itemObject.deadline) ? passedDateStyle : {}}>{!itemObject.deadline ? 'No deadline': getDeadline(itemObject.deadline)}</Typography>
             </div>
         </div>
     )

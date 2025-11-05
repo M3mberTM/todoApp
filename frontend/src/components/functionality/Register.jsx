@@ -3,15 +3,31 @@ import Input from '../custom/Input.jsx';
 import Typography from '../custom/Typography.jsx';
 import Card from '../custom/Card.jsx';
 import {useNavigate} from 'react-router-dom';
+import {useNotification} from '../../context/notification/useNotification.js';
 
 const Register = ({handleRegister}) => {
     const navigate = useNavigate()
+    const {addNotification} = useNotification()
+
     const onRegister = (event) => {
         event.preventDefault()
+        const email = event.target.email.value
+        const password = event.target.password.value
+        const username = event.target.username.value
+        const repeatPassword = event.target.repeatPassword.value
+        if (email.length < 1 || password.length < 1 || username.length < 1) {
+            addNotification('Missing fields', true)
+            return
+        }
+
+        if (password !== repeatPassword) {
+            addNotification('Passwords do not match', true)
+            return
+        }
         const credentials = {
-            email: event.target.email.value,
-            password: event.target.password.value,
-            username: event.target.username.value
+            email,
+            password,
+            username
         }
         handleRegister(credentials).then()
     }

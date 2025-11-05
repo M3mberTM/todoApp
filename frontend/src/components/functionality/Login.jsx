@@ -3,14 +3,22 @@ import Input from '../custom/Input.jsx';
 import Typography from '../custom/Typography.jsx';
 import Card from '../custom/Card.jsx';
 import {useNavigate} from 'react-router-dom';
+import {useNotification} from '../../context/notification/useNotification.js';
 
 const Login = ({handleLogin}) => {
     const navigate = useNavigate()
+    const {addNotification} = useNotification()
     const onLogin = (event) => {
         event.preventDefault()
+        const email = event.target.email.value
+        const password = event.target.password.value
+        if (email.length < 1 || password.length < 1) {
+            addNotification('Missing fields', true)
+            return
+        }
         const credentials = {
-            email: event.target.email.value,
-            password: event.target.password.value
+            email,
+            password
         }
         handleLogin(credentials).then()
     }

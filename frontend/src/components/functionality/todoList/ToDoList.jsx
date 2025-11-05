@@ -2,7 +2,7 @@ import ToDoSection from './ToDoSection.jsx';
 import ToDoItem from './ToDoItem.jsx';
 import Conditional from '../../custom/Conditional.jsx';
 
-const ToDoList = ({items, groupBy, handleUpdate}) => {
+const ToDoList = ({items, groupBy, handleUpdate, handleRemove}) => {
     const sections = {
         priority: {None: 0, Low: 1, Medium: 2, High: 3}
     }
@@ -20,13 +20,13 @@ const ToDoList = ({items, groupBy, handleUpdate}) => {
         <div style={listStyle}>
             <Conditional condition={groupBy === 'None'}>
                 {items.map(elem => {
-                    return <ToDoItem key={elem.id} itemObject={elem} handleUpdate={handleUpdate}/>
+                    return <ToDoItem key={elem.id} itemObject={elem} handleUpdate={handleUpdate} handleRemove={handleRemove}/>
                 })}
             </Conditional>
             <Conditional condition={groupBy === 'Priority'}>
                 <div style={sectionStyle}>
                     {Object.keys(sections.priority).map(priority => {
-                        return <ToDoSection key={priority} name={priority} items={items.filter(item => item.priority === sections.priority[priority])} handleUpdate={handleUpdate}/>
+                        return <ToDoSection key={priority} name={priority} items={items.filter(item => item.priority === sections.priority[priority])} handleUpdate={handleUpdate} handleRemove={handleRemove}/>
                     })}
                 </div>
             </Conditional>

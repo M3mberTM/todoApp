@@ -35,10 +35,10 @@ const Register = ({handleRegister}) => {
         <Card>
             <form onSubmit={onRegister}>
                 <Typography>Register</Typography>
-                <Input name={'username'} type={'text'} placeholder={'Your username...'} ss={{width: '80%'}}/>
+                <Input name={'username'} type={'text'} placeholder={'Your username...'} ss={{width: '80%'}} maxLength={30}/>
                 <Input name={'email'} type={'email'} placeholder={'Your email...'} ss={{width: '80%'}}/>
-                <Input name={'password'} type={'password'} placeholder={'Your password...'} ss={{width: '80%'}}/>
-                <Input name={'repeatPassword'} type={'password'} placeholder={'Your password again...'} ss={{marginBottom: '10px', width: '80%'}}/>
+                <Input name={'password'} type={'password'} placeholder={'Your password...'} ss={{width: '80%'}} maxLength={50}/>
+                <Input name={'repeatPassword'} type={'password'} placeholder={'Your password again...'} ss={{marginBottom: '10px', width: '80%'}} maxLength={50}/>
                 <Button type={'submit'} ss={{width: '50%', marginBottom: '7px'}}>Register</Button>
                 <Typography size={'sub'} ss={{marginBottom: '2px'}}>Do you have an account?</Typography>
                 <Button type={'button'} onClick={() => navigate('/login')} ss={{width: '50%'}}>Log in</Button>

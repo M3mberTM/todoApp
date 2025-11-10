@@ -16,7 +16,8 @@ const ToDoItem = ({itemObject, handleUpdate, handleRemove}) => {
     const {getThemeColors} = useTheme()
     const colors = getThemeColors()
     const itemStyle = {
-        width: '200px',
+        width: '20vw',
+        minWidth: '200px',
         backgroundColor: colors.bgLight,
         padding: '5px 10px',
         borderRadius: '5px',

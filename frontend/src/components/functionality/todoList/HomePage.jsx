@@ -19,10 +19,7 @@ const HomePage = ({user, handleLogout}) => {
         })
     }, []);
 
-    const createItem = (content) => {
-        const newItem = {
-            content
-        }
+    const createItem = (newItem) => {
         itemService.create(newItem).then(item => {
             setItems(items.concat(item))
         }).catch(error => {
@@ -54,9 +51,11 @@ const HomePage = ({user, handleLogout}) => {
             addNotification(err.response.data.error, true)
         })
     }
+
+
     return (
         <Window>
-            <Header name={'Todo app'} user={user} handleLogout={handleLogout}/>
+            <Header name={'Todo List'} user={user} handleLogout={handleLogout}/>
             <div style={{marginTop: '10px'}}>
                 <TodoOptions groupBy={groupBy} setGroupBy={setGroupBy} createItem={createItem}/>
                 <ToDoList items={items} groupBy={groupBy} handleUpdate={updateItem} handleRemove={removeItem}/>

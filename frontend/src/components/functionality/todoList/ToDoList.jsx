@@ -1,11 +1,7 @@
 import ToDoSection from './ToDoSection.jsx';
-import ToDoItem from './ToDoItem.jsx';
-import Conditional from '../../custom/Conditional.jsx';
+import {priorities} from '../../../utils/constants.js';
 
-const ToDoList = ({items, groupBy, handleUpdate, handleRemove}) => {
-    const sections = {
-        priority: {None: 0, Low: 1, Medium: 2, High: 3}
-    }
+const ToDoList = ({items, handleUpdate, handleRemove}) => {
     const listStyle = {
         padding: '5px 10px'
     }
@@ -18,18 +14,11 @@ const ToDoList = ({items, groupBy, handleUpdate, handleRemove}) => {
 
     return (
         <div style={listStyle}>
-            <Conditional condition={groupBy === 'None'}>
-                {items.map(elem => {
-                    return <ToDoItem key={elem.id} itemObject={elem} handleUpdate={handleUpdate} handleRemove={handleRemove}/>
+            <div style={sectionStyle}>
+                {Object.keys(priorities).map(priority => {
+                    return <ToDoSection key={priority} name={priorities[priority]} items={items.filter(item => item.priority === parseInt(priority))} handleUpdate={handleUpdate} handleRemove={handleRemove}/>
                 })}
-            </Conditional>
-            <Conditional condition={groupBy === 'Priority'}>
-                <div style={sectionStyle}>
-                    {Object.keys(sections.priority).map(priority => {
-                        return <ToDoSection key={priority} name={priority} items={items.filter(item => item.priority === sections.priority[priority])} handleUpdate={handleUpdate} handleRemove={handleRemove}/>
-                    })}
-                </div>
-            </Conditional>
+            </div>
         </div>
     )
 }

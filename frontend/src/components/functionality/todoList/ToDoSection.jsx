@@ -2,12 +2,13 @@ import Typography from '../../custom/Typography.jsx';
 import ToDoItem from './ToDoItem.jsx';
 
 const ToDoSection = ({items, name, handleUpdate, handleRemove}) => {
-    if (items.length < 1) {
-        return null
-    }
     const sectionStyle = {
-        display: 'inline-block',
-        margin: '5px'
+        display: 'flex',
+        flexDirection: 'column',
+        margin: '5px',
+        flex: '1',
+        alignItems: 'center',
+        minWidth: '220px'
     }
     return (
         <div style={sectionStyle}>

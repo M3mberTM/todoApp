@@ -23,11 +23,11 @@ export default defineConfig([
             },
         },
         rules: {
-            'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+            'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z]' }],
             'indent': ['error', 4],
             'quotes': ['error', 'single'],
             'eqeqeq': 'error',
-            'no-trailing-spaces': 'error'
+            'no-trailing-spaces': 'error',
         },
     },
 ])

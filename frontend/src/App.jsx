@@ -67,6 +67,7 @@ function App() {
         setUser(null)
         navigate('/login')
     }
+
     return (
         <div style={wrapperStyle}>
             <Notification type={notification.type}>{notification.msg}</Notification>

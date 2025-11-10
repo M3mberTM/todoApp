@@ -15,7 +15,7 @@ itemRouter.post('/', middleware.userExtractor, async (req, res) => {
         content: body.content,
         priority: body.priority,
         deadline: body.deadline,
-        userId: user.id
+        userId: user.id,
     })
 
     const savedItem = await item.save()
@@ -34,6 +34,7 @@ itemRouter.put('/:id', middleware.userExtractor, async (req, res) => {
 
     item.content = req.body.content ?? item.content
     item.priority = req.body.priority ?? item.priority
+    item.isCompleted = req.body.isCompleted ?? item.isCompleted
     if (item.deadline) {
         item.deadline = req.body.deadline ?? item.deadline
     } else {

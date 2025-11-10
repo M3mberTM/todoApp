@@ -1,23 +1,29 @@
-import Select from '../../custom/Select.jsx';
-import SelectItem from '../../custom/SelectItem.jsx';
-import ToDoItemForm from './ToDoItemForm.jsx';
+import Button from '../../custom/Button.jsx'
+import ItemCreateModal from './ItemCreateModal.jsx';
+import {useState} from 'react';
+import Input from '../../custom/Input.jsx';
 
-const TodoOptions = ({groupBy, setGroupBy, createItem}) => {
-    const groupByOptions = ['None', 'Priority']
+const TodoOptions = ({createItem}) => {
+    const [isCreateOpen, setIsCreateOpen] = useState(false)
+
     const itemStyle = {
         display: 'flex',
         justifyContent: 'space-between',
         padding: '0 10px',
         alignItems: 'center'
     }
-    return <div style={itemStyle}>
-        <ToDoItemForm createNewItem={createItem}/>
-        <Select label={'Group by'} variant={'outlined'} value={groupBy} onChange={(event) => setGroupBy(event.target.value)}>
-            {groupByOptions.map(elem => {
-                return <SelectItem key={elem} value={elem}>{elem}</SelectItem>
-            })}
-        </Select>
 
+    const openCreateModal = () => {
+        setIsCreateOpen(true)
+    }
+
+    const closeCreateModal = () => {
+        setIsCreateOpen(false)
+    }
+    return <div style={itemStyle}>
+        <ItemCreateModal isOpen={isCreateOpen} createItem={createItem} closeModal={closeCreateModal}/>
+        <Input variant={'outlined'} placeholder={'Search...'}/>
+        <Button onClick={openCreateModal} ss={{marginTop: '0'}}>Add new item</Button>
     </div>
 }
 

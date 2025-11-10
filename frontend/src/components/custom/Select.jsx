@@ -1,8 +1,7 @@
-import Typography from './Typography.jsx';
 import {useTheme} from '../../context/theme/useTheme.js';
 import {forwardRef} from 'react';
 
-const Select =forwardRef( ({children, label, variant='standard', name='select',ss={label: {}, select: {}}, ...props}, ref) => {
+const Select =forwardRef( ({children, variant='standard',ss={}, ...props}, ref) => {
     const {getThemeColors} = useTheme()
     const colors = getThemeColors()
 
@@ -25,21 +24,18 @@ const Select =forwardRef( ({children, label, variant='standard', name='select',s
         ...ss.select,
     }
     const standardStyle = {
+        backgroundColor: colors.bg,
+        borderWidth: '2px',
+        borderColor: colors.bgSecondary,
+        color: colors.text,
         ...baseStyle,
-        ...ss.select
+        ...ss
     }
     const chosenStyle = variant === 'outlined' ? outlinedStyle : standardStyle
-    const labelStyle = {
-        display: 'inline-block',
-        ...ss.label
-    }
     return (
-        <div style={{display: 'inline-block', textAlign: 'right'}}>
-            <Typography ss={labelStyle} size={'h3'}>{label}</Typography>
-            <select style={chosenStyle} name={name} ref={ref} {...props}>
-                {children}
-            </select>
-        </div>
+        <select style={chosenStyle} ref={ref} {...props}>
+            {children}
+        </select>
     )
 })
 

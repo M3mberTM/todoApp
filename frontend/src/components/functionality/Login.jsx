@@ -27,7 +27,7 @@ const Login = ({handleLogin}) => {
             <form onSubmit={onLogin}>
                 <Typography>Login</Typography>
                 <Input name={'email'} type={'email'} placeholder={'Email'} ss={{width: '80%'}}/>
-                <Input name={'password'} type={'password'} placeholder={'Password'} ss={{marginBottom: '10px', width: '80%'}}/>
+                <Input name={'password'} type={'password'} placeholder={'Password'} ss={{marginBottom: '10px', width: '80%'}} maxLength={50}/>
                 <Button type={'submit'} ss={{width: '50%', marginBottom: '7px'}}>Log in</Button><br/>
                 <Typography size={'sub'} ss={{marginBottom: '2px'}}>Don't have an account?</Typography>
                 <Button type={'button'} onClick={() => navigate('/register')} ss={{width: '50%'}}>Register</Button>

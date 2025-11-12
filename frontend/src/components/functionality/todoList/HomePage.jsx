@@ -20,7 +20,11 @@ const HomePage = ({user, handleLogout}) => {
     }, []);
 
     const sortItems = (items) => {
-        return items.toSorted((a,b)=> {return a.updatedAt > b.updatedAt ? -1 : 1})
+        return items.toSorted((a,b)=> {
+            const completedDif = a.isCompleted - b.isCompleted
+            const updatedDif = a.updatedAt > b.updatedAt ? -1 : 1
+            return completedDif*2 + updatedDif
+        })
     }
     const createItem = (newItem) => {
         itemService.create(newItem).then(item => {

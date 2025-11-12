@@ -7,13 +7,8 @@ const Button =forwardRef( ({children, ss={}, ...props}, ref) => {
 
     const colors = getThemeColors()
 
-    const bgColor = !ss.backgroundColor ? colors.bgSecondary : ss.backgroundColor
-    const textColor = !ss.color ? colors.bg : ss.color
-    const hoverColor = !ss.hover ? colors.hover : ss.hover
-    const hoverTextColor = !ss.hoverText ? textColor : ss.hoverText
-    const buttonStyle = {
-        backgroundColor: isHover ? hoverColor : bgColor,
-        color: isHover ? hoverTextColor : textColor,
+
+    const baseStyle = {
         textAlign: 'center',
         padding: '5px 10px',
         height: '32px',
@@ -22,7 +17,15 @@ const Button =forwardRef( ({children, ss={}, ...props}, ref) => {
         marginTop: '5px',
         fontWeight: 'bold',
         outline: 'none',
+        ...ss
+    }
+
+    const buttonStyle = {
+        backgroundColor: colors.bgSecondary,
+        color: colors.bg,
+        filter: isHover ? 'brightness(70%)' : '',
         border: 'none',
+        ...baseStyle,
         ...ss
     }
 

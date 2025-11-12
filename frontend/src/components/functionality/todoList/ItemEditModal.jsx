@@ -10,7 +10,7 @@ import {useState} from 'react';
 import {useTheme} from '../../../context/theme/useTheme.js';
 import {priorities} from '../../../utils/constants.js';
 
-const ItemEditModal = ({isOpen, itemObject, closeModal, editItem}) => {
+const ItemEditModal = ({isOpen, itemObject, closeModal, editItem, handleRemove}) => {
     const [error, setError] = useState('')
     const {getThemeColors} = useTheme()
     const colors = getThemeColors()
@@ -66,6 +66,11 @@ const ItemEditModal = ({isOpen, itemObject, closeModal, editItem}) => {
         return {date: inputDate, time: inputTime}
     }
 
+    const removeItem = () => {
+        handleRemove(itemObject.id)
+        closeModal()
+    }
+
     const timestamps = getSplitDate(itemObject.deadline)
 
     return <Modal isOpen={isOpen} ss={modalStyle}>
@@ -89,6 +94,7 @@ const ItemEditModal = ({isOpen, itemObject, closeModal, editItem}) => {
                 <Input name={'time'} type={'time'} variant={'theme'} ss={{colorScheme: localStorage.getItem('theme'), flex: '1'}} defaultValue={timestamps.time}/>
             </div>
             {error.length > 0 && <Typography size={'sub'}>{error}</Typography>}
+            <Button type={'button'} onClick={removeItem} ss={{width: '100%', backgroundColor: colors.bg, color: colors.text}}>Remove</Button>
             <Button type={'submit'} ss={{width: '100%'}}>Update</Button>
         </form>
     </Modal>

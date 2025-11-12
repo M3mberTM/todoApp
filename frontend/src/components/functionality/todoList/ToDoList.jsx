@@ -16,7 +16,7 @@ const ToDoList = ({items, handleUpdate, handleRemove}) => {
     return (
         <div style={listStyle}>
             <div style={sectionStyle}>
-                {Object.keys(priorities).map(priority => {
+                {Object.keys(priorities).reverse().map(priority => {
                     return <ToDoSection key={priority} name={priorities[priority]} items={items.filter(item => item.priority === parseInt(priority))} handleUpdate={handleUpdate} handleRemove={handleRemove}/>
                 })}
             </div>

@@ -92,17 +92,17 @@ const ToDoItem = ({itemObject, handleRemove, handleUpdate}) => {
         return (
             <div>
                 <ItemEditModal itemObject={itemObject} closeModal={closeEditModal} isOpen={isEditOpen} editItem={handleUpdate}/>
-                <div style={itemStyle} onClick={() => openEditModal()}>
+                <div style={itemStyle}>
                     <div style={{display: 'flex'}}>
                         <div style={{display: 'grid'}}>
                             <BsCheckSquareFill style={visibleElement}/>
                             <CheckBox onChange={completeItem} ss={invisibleElement}/>
                         </div>
-                        <div style={{display: 'flex', alignItems: 'center', flex: '1', paddingLeft: '5px'}}>
+                        <div onClick={() => openEditModal()} style={{display: 'flex', alignItems: 'center', flex: '1', paddingLeft: '5px'}}>
                             <Typography size={'15px'} ss={{flex:'1'}}>{itemObject.content}</Typography>
                         </div>
                     </div>
-                    <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <div onClick={() => openEditModal()} style={{display: 'flex', justifyContent: 'space-between'}}>
                         <Typography size={'sub'} onClick={() => console.log('priority')}>{priorities[itemObject.priority]}</Typography>
                         <Typography size={'sub'} ss={isDeadlinePassed(itemObject.deadline) ? passedDateStyle : {}}>{!itemObject.deadline ? 'No deadline': getDeadline(itemObject.deadline)}</Typography>
                     </div>
@@ -114,17 +114,17 @@ const ToDoItem = ({itemObject, handleRemove, handleUpdate}) => {
     return (
         <div>
             <ItemEditModal itemObject={itemObject} closeModal={closeEditModal} isOpen={isEditOpen} editItem={handleUpdate} handleRemove={handleRemove}/>
-            <div style={itemStyle} onClick={() => openEditModal()}>
+            <div style={itemStyle}>
                 <div style={{display: 'flex', flexDirection: 'row', }}>
                     <div style={{display: 'grid'}}>
                         <BsSquareFill style={visibleElement}/>
                         <CheckBox onChange={completeItem} ss={invisibleElement}/>
                     </div>
-                    <div style={{display: 'flex', alignItems: 'center', flex: '1', paddingLeft: '5px'}}>
+                    <div onClick={() => openEditModal()} style={{display: 'flex', alignItems: 'center', flex: '1', paddingLeft: '5px'}}>
                         <Typography size={'15px'} ss={{flex:'1'}}>{itemObject.content}</Typography>
                     </div>
                 </div>
-                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <div onClick={() => openEditModal()} style={{display: 'flex', justifyContent: 'space-between'}}>
                     <Typography size={'sub'} onClick={() => console.log('priority')}>{priorities[itemObject.priority]}</Typography>
                     <Typography size={'sub'}>{!itemObject.deadline ? 'No deadline': getDeadline(itemObject.deadline)}</Typography>
                 </div>

@@ -1,7 +1,7 @@
 import {useTheme} from '../../context/theme/useTheme.js';
 import {forwardRef} from 'react';
 
-const Input = forwardRef(({placeholder, variant='standard', ss={}, ...props}, ref) => {
+const Input = forwardRef(({variant='standard', ss={}, ...props}, ref) => {
     const {getThemeColors} = useTheme()
     const colors = getThemeColors()
 
@@ -50,7 +50,7 @@ const Input = forwardRef(({placeholder, variant='standard', ss={}, ...props}, re
     }
 
     return (
-        <input style={chosenStyle} placeholder={placeholder} ref={ref} {...props}/>
+        <input style={chosenStyle} ref={ref} {...props}/>
     )
 })
 

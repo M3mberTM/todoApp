@@ -3,13 +3,14 @@ import {priorities} from '../../../utils/constants.js';
 
 const ToDoList = ({items, handleUpdate, handleRemove}) => {
     const listStyle = {
-        padding: '5px 10px'
+        padding: '5px 10px',
+        height: '100%',
+        overflow: 'auto'
     }
 
     const sectionStyle = {
         display: 'flex',
         flexDirection: 'row',
-        overflow: 'auto'
     }
 
     return (

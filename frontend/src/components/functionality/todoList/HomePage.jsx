@@ -56,7 +56,7 @@ const HomePage = ({user, handleLogout}) => {
     return (
         <Window>
             <Header name={'Todo List'} user={user} handleLogout={handleLogout}/>
-            <div style={{marginTop: '10px'}}>
+            <div style={{marginTop: '10px', display: 'flex', flexDirection: 'column', flex: '1', minHeight: '0'}}>
                 <TodoOptions groupBy={groupBy} setGroupBy={setGroupBy} createItem={createItem}/>
                 <ToDoList items={items} groupBy={groupBy} handleUpdate={updateItem} handleRemove={removeItem}/>
             </div>

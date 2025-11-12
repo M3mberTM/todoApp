@@ -7,6 +7,7 @@ const Window = ({children}) => {
     const windowStyle = {
         width: '97%',
         minHeight: '93vh',
+        height: '93vh',
         backgroundColor: colors.bg,
         borderRadius: '10px',
         boxSizing: 'border-box',

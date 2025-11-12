@@ -13,15 +13,18 @@ const HomePage = ({user, handleLogout}) => {
 
     useEffect(() => {
         itemService.getAll().then(userItems => {
-            setItems(userItems)
+            setItems(sortItems(userItems))
         }).catch(err => {
             addNotification(err.response.data.error, true)
         })
     }, []);
 
+    const sortItems = (items) => {
+        return items.toSorted((a,b)=> {return a.updatedAt > b.updatedAt ? -1 : 1})
+    }
     const createItem = (newItem) => {
         itemService.create(newItem).then(item => {
-            setItems(items.concat(item))
+            setItems(sortItems(items.concat(item)))
         }).catch(error => {
             addNotification(error.response.data.error, true)
         })
@@ -35,7 +38,7 @@ const HomePage = ({user, handleLogout}) => {
                 }
                 return elem
             })
-            setItems(newItems)
+            setItems(sortItems(newItems))
         }).catch(err => {
             addNotification(err.response.data.error, true)
         })

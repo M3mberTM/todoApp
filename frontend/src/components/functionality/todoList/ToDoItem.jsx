@@ -9,15 +9,7 @@ const ToDoItem = ({itemObject, handleRemove, handleUpdate}) => {
     const [isEditOpen, setIsEditOpen] = useState(false)
     const {getThemeColors} = useTheme()
     const colors = getThemeColors()
-    const itemStyle = {
-        width: '20vw',
-        minWidth: '200px',
-        backgroundColor: colors.bgLight,
-        padding: '5px 10px',
-        borderRadius: '5px',
-        marginBottom: '5px',
-        marginTop: '5px'
-    }
+
 
     let priorityColor
     if (itemObject.priority === 1) {
@@ -27,8 +19,19 @@ const ToDoItem = ({itemObject, handleRemove, handleUpdate}) => {
     } else if (itemObject.priority === 3) {
         priorityColor = colors.highPriority
     } else {
-        priorityColor = colors.text
+        priorityColor = colors.bgLight
     }
+
+    const itemStyle = {
+        width: '20vw',
+        minWidth: '200px',
+        backgroundColor: priorityColor,
+        padding: '5px 10px',
+        borderRadius: '5px',
+        marginBottom: '5px',
+        marginTop: '5px'
+    }
+
 
     const getDeadline = (deadline) => {
         const date = new Date(deadline)
@@ -62,10 +65,12 @@ const ToDoItem = ({itemObject, handleRemove, handleUpdate}) => {
             <div style={itemStyle} onClick={() => openEditModal()}>
                 <div style={{display: 'flex'}}>
                     <CheckBox onChange={() => handleRemove(itemObject.id)}/>
-                    <Typography size={'15px'} ss={{flex:'1'}}>{itemObject.content}</Typography>
+                    <div style={{display: 'flex', alignItems: 'center', flex: '1', paddingLeft: '5px'}}>
+                        <Typography size={'15px'} ss={{flex:'1'}}>{itemObject.content}</Typography>
+                    </div>
                 </div>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                    <Typography size={'sub'} ss={{color: priorityColor}} onClick={() => console.log('priority')}>{priorities[itemObject.priority]}</Typography>
+                    <Typography size={'sub'} onClick={() => console.log('priority')}>{priorities[itemObject.priority]}</Typography>
                     <Typography size={'sub'} ss={isDeadlinePassed(itemObject.deadline) ? passedDateStyle : {}}>{!itemObject.deadline ? 'No deadline': getDeadline(itemObject.deadline)}</Typography>
                 </div>
             </div>

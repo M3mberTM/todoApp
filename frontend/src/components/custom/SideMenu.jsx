@@ -7,10 +7,10 @@ const SideMenu = forwardRef(({children, ss={}, ...props}, ref) => {
 
     const menuStyle = {
         borderRight: '2px solid',
+        padding: '10px 7px',
         borderColor: colors.bgSecondary,
         display: 'flex',
         flexDirection: 'column',
-        width: '200px',
         ...ss
     }
     return (<div style={menuStyle} ref={ref} {...props}>

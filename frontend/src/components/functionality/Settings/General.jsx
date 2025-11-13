@@ -19,6 +19,7 @@ const General = ({user}) => {
     }
     return <div style={itemStyle}>
         <Typography size={'h2'}>General Information</Typography>
+
         <Typography size={'h3'} ss={{marginTop: '10px'}}>Username: </Typography>
         <Typography size={'p'} ss={{color: colors.bgSecondary}}>{user.username}</Typography>
         <Typography size={'h3'} ss={{marginTop: '10px'}}>Email: </Typography>

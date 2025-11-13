@@ -10,6 +10,7 @@ import {useState, useEffect} from 'react';
 import userService from '../../../services/users.js'
 import RemoveUser from './RemoveUser.jsx';
 import {useNotification} from '../../../context/notification/useNotification.js';
+import Button from '../../custom/Button.jsx';
 
 const Settings = ({user, handleLogout, setUser}) => {
     const {getThemeColors} = useTheme()
@@ -58,10 +59,12 @@ const Settings = ({user, handleLogout, setUser}) => {
         <Window>
             <Header name={'Settings'} user={user} handleLogout={handleLogout}/>
             <Body>
-                <SideMenu>
-                    <SideMenuItem onClick={() => setPage(pages.GENERAL)}>General Information</SideMenuItem>
-                    <SideMenuItem onClick={() => setPage(pages.UPDATE_USER)}>Update Information</SideMenuItem>
-                    <SideMenuItem onClick={() => setPage(pages.REMOVE_USER)} ss={{color: colors.textSecondary}}>Delete User</SideMenuItem>
+                <SideMenu ss={{justifyContent: 'space-between', width: '200px'}}>
+                    <div style={{display: 'flex', flexDirection: 'column'}}>
+                        <SideMenuItem onClick={() => setPage(pages.GENERAL)} ss={{backgroundColor: page === pages.GENERAL ? colors.bgLight : ''}}>General Information</SideMenuItem>
+                        <SideMenuItem onClick={() => setPage(pages.UPDATE_USER)} ss={{backgroundColor: page === pages.UPDATE_USER ? colors.bgLight : ''}}>Update Information</SideMenuItem>
+                    </div>
+                    <Button ss={{padding: '10px', height: 'auto', fontWeight: 'bold', fontSize: '17px'}}>Delete User</Button>
                 </SideMenu>
                 {page === pages.GENERAL && <General user={currUser}/>}
                 {page === pages.UPDATE_USER && <UpdateUser user={currUser} handleUpdate={updateUser}/>}

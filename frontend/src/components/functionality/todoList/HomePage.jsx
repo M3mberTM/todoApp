@@ -7,13 +7,16 @@ import itemService from '../../../services/items.js'
 import {useNotification} from '../../../context/notification/useNotification.js';
 
 const HomePage = ({user, handleLogout}) => {
-    const [groupBy, setGroupBy] = useState('None')
     const [items, setItems] = useState([])
+    const [search, setSearch] = useState('')
+    const [filteredItems, setFilteredItems] = useState([])
     const {addNotification} = useNotification()
 
     useEffect(() => {
         itemService.getAll().then(userItems => {
-            setItems(sortItems(userItems))
+            const sorted = sortItems(userItems)
+            setItems(sorted)
+            setFilteredItems(sorted)
         }).catch(err => {
             addNotification(err.response.data.error, true)
         })
@@ -59,13 +62,18 @@ const HomePage = ({user, handleLogout}) => {
         })
     }
 
+    const searchItems = (value) => {
+        setSearch(value)
+        setFilteredItems(items.filter(item=> item.content.includes(value)))
+    }
+
 
     return (
         <Window>
             <Header name={'Todo List'} user={user} handleLogout={handleLogout}/>
             <div style={{marginTop: '10px', display: 'flex', flexDirection: 'column', flex: '1', minHeight: '0'}}>
-                <TodoOptions groupBy={groupBy} setGroupBy={setGroupBy} createItem={createItem}/>
-                <ToDoList items={items} groupBy={groupBy} handleUpdate={updateItem} handleRemove={removeItem}/>
+                <TodoOptions createItem={createItem} setSearch={searchItems} searchVal={search}/>
+                <ToDoList items={filteredItems} handleUpdate={updateItem} handleRemove={removeItem}/>
             </div>
         </Window>
     )

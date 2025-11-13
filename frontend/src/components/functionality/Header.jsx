@@ -25,7 +25,7 @@ const Header =forwardRef( ({user, name, handleLogout,...props}, ref) => {
             <Typography size={'h2'}>{name}</Typography>
             <Popup
                 trigger={<Typography size={'h3'}>{user.username} </Typography>}
-                position="bottom center"
+                position="bottom right"
                 on="hover"
                 closeOnDocumentClick
                 mouseLeaveDelay={300}

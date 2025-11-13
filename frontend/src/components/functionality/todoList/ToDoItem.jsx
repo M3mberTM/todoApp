@@ -4,7 +4,7 @@ import {useTheme} from '../../../context/theme/useTheme.js';
 import CheckBox from '../../custom/CheckBox.jsx';
 import ItemEditModal from './ItemEditModal.jsx';
 import {useState} from 'react';
-import {BsSquareFill, BsCheckSquareFill} from 'react-icons/bs';
+import {BsSquareFill, BsCheckSquareFill, BsFillExclamationDiamondFill} from 'react-icons/bs';
 
 const ToDoItem = ({itemObject, handleRemove, handleUpdate}) => {
     const [isEditOpen, setIsEditOpen] = useState(false)
@@ -67,10 +67,6 @@ const ToDoItem = ({itemObject, handleRemove, handleUpdate}) => {
         return deadlineDate < currDate
     }
 
-    const passedDateStyle = {
-        color: '#ff0000',
-    }
-
     const openEditModal = () => {
         setIsEditOpen(true)
     }
@@ -87,11 +83,10 @@ const ToDoItem = ({itemObject, handleRemove, handleUpdate}) => {
         handleUpdate(updatedItem)
     }
 
-
     if (itemObject.isCompleted) {
         return (
             <div>
-                <ItemEditModal itemObject={itemObject} closeModal={closeEditModal} isOpen={isEditOpen} editItem={handleUpdate}/>
+                <ItemEditModal itemObject={itemObject} closeModal={closeEditModal} isOpen={isEditOpen} editItem={handleUpdate} handleRemove={handleRemove}/>
                 <div style={itemStyle}>
                     <div style={{display: 'flex'}}>
                         <div style={{display: 'grid'}}>
@@ -104,7 +99,7 @@ const ToDoItem = ({itemObject, handleRemove, handleUpdate}) => {
                     </div>
                     <div onClick={() => openEditModal()} style={{display: 'flex', justifyContent: 'space-between'}}>
                         <Typography size={'sub'} onClick={() => console.log('priority')}>{priorities[itemObject.priority]}</Typography>
-                        <Typography size={'sub'} ss={isDeadlinePassed(itemObject.deadline) ? passedDateStyle : {}}>{!itemObject.deadline ? 'No deadline': getDeadline(itemObject.deadline)}</Typography>
+                        <Typography size={'sub'}>{!itemObject.deadline ? 'No deadline': getDeadline(itemObject.deadline)}</Typography>
                     </div>
                 </div>
             </div>
@@ -115,13 +110,14 @@ const ToDoItem = ({itemObject, handleRemove, handleUpdate}) => {
         <div>
             <ItemEditModal itemObject={itemObject} closeModal={closeEditModal} isOpen={isEditOpen} editItem={handleUpdate} handleRemove={handleRemove}/>
             <div style={itemStyle}>
-                <div style={{display: 'flex', flexDirection: 'row', }}>
+                <div style={{display: 'flex', flexDirection: 'row', marginBottom: '5px' }}>
                     <div style={{display: 'grid'}}>
                         <BsSquareFill style={visibleElement}/>
                         <CheckBox onChange={completeItem} ss={invisibleElement}/>
                     </div>
                     <div onClick={() => openEditModal()} style={{display: 'flex', alignItems: 'center', flex: '1', paddingLeft: '5px'}}>
                         <Typography size={'15px'} ss={{flex:'1'}}>{itemObject.content}</Typography>
+                        {isDeadlinePassed(itemObject.deadline) && <BsFillExclamationDiamondFill style={{fill: colors.textSecondary}}/>}
                     </div>
                 </div>
                 <div onClick={() => openEditModal()} style={{display: 'flex', justifyContent: 'space-between'}}>

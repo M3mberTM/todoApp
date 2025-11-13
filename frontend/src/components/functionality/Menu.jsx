@@ -8,6 +8,7 @@ const Menu = ({children, ss={}}) => {
         display: 'flex',
         flexDirection: 'column',
         backgroundColor: colors.bg,
+        overflow: 'hidden',
         ...ss
     }
     return (

@@ -1,21 +1,27 @@
-import Typography from '../custom/Typography.jsx';
 import {useTheme} from '../../context/theme/useTheme.js';
+import {useState} from 'react';
 
-const MenuItem = ({children, clickHandle, size='15px', ss={}}) => {
+const MenuItem = ({children, clickHandle, ss={}}) => {
     const {getThemeColors} = useTheme()
     const colors = getThemeColors()
+    const [isHover, setIsHover] = useState(false)
 
+    const hoverBackgroundColor = !ss.hoverBackgroundColor ? colors.bgSecondary : ss.hoverBackgroundColor
+    const hoverColor = !ss.hoverColor ? colors.text : ss.hoverColor
+    const bgColor = !ss.backgroundColor ? colors.bgLight : ss.backgroundColor
+    const textColor = !ss.color ? colors.text : ss.color
+
+    const {backgroundColor: _bg, color: _c, ...styles} = ss
     const menuItemStyle = {
-        border: '1px solid',
-        borderColor: colors.textSecondary,
-        backgroundColor: colors.bg,
         textAlign: 'center',
-        padding: '3px 10px',
-        ...ss
+        padding: '10px 10px',
+        backgroundColor: isHover ? hoverBackgroundColor : bgColor,
+        color: isHover ? hoverColor : textColor,
+        ...styles
     }
     return (
-        <div onClick={clickHandle} style={menuItemStyle}>
-            <Typography size={size}>{children}</Typography>
+        <div onClick={clickHandle} onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)} style={menuItemStyle}>
+            {children}
         </div>
     )
 }

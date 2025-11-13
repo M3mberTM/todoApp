@@ -1,10 +1,6 @@
-import { useTheme } from '../../context/theme/useTheme.js'
 import { forwardRef, useRef, useState, useEffect } from 'react'
 
-const PopUp = forwardRef(({ element, leaveOffset=500,verticalOffset=10,horizonalOffset=10, children, ...props }, ref) => {
-    const { getThemeColors } = useTheme()
-    const colors = getThemeColors()
-
+const PopUp = forwardRef(({ element, leaveOffset=500,verticalOffset=0,horizonalOffset=0, children, ...props }, ref) => {
     const elementRef = useRef(null)
     const popupRef = useRef(null)
     const [open, setOpen] = useState(false)

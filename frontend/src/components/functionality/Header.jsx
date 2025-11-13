@@ -1,6 +1,6 @@
 import {useTheme} from '../../context/theme/useTheme.js';
 import Typography from '../custom/Typography.jsx';
-import Popup from 'reactjs-popup';
+import PopUp from '../custom/PopUp.jsx';
 import Menu from './Menu.jsx';
 import MenuItem from './MenuItem.jsx';
 import {useNavigate} from 'react-router-dom';
@@ -23,22 +23,17 @@ const Header =forwardRef( ({user, name, handleLogout,...props}, ref) => {
     return (
         <div style={headerStyle} ref={ref} {...props}>
             <Typography size={'h2'}>{name}</Typography>
-            <Popup
-                trigger={<Typography size={'h3'}>{user.username} </Typography>}
-                position="bottom right"
-                on="hover"
-                closeOnDocumentClick
-                mouseLeaveDelay={300}
-                mouseEnterDelay={0}
-                arrow={false}
+            <PopUp
+                element={<Typography size={'h3'}>{user.username}</Typography>}
+                leaveOffset={300}
             >
-                <Menu ss={{width: '200px'}}>
+                <Menu ss={{width: '300px'}}>
                     <MenuItem clickHandle={() => toggleTheme(theme === 'dark' ? 'light':'dark')}>Switch to {theme === 'dark' ? 'light':'dark'} theme</MenuItem>
                     <MenuItem clickHandle={() => navigate('/')}>Home Page</MenuItem>
                     <MenuItem clickHandle={() => navigate('/settings')}>Settings</MenuItem>
                     <MenuItem clickHandle={() => handleLogout()}>Log out</MenuItem>
                 </Menu>
-            </Popup>
+            </PopUp>
         </div>
     )
 })
